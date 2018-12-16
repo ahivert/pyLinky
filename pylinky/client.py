@@ -42,10 +42,12 @@ class LinkyClient(object):
         }
 
         try:
-            self._session.post(LOGIN_URL,
-                                data=data,
-                                allow_redirects=False,
-                                timeout= self._timeout)
+            self._session.post(
+                LOGIN_URL,
+                data=data,
+                allow_redirects=False,
+                timeout=self._timeout
+            )
 
         except OSError:
             raise PyLinkyError("Can not submit login form")
@@ -56,11 +58,18 @@ class LinkyClient(object):
         return True
 
     def _get_data(self, p_p_resource_id, start_date=None, end_date=None):
-        """Get data."""
+        """Get data.
 
+        :param str p_p_resource_id: Define type of wanted data
+        :param date start_date: Get data since this date
+        :param date end_date: Get data to this date
+        :return dict:
+        """
+        start = start_date.strftime("%d/%m/%Y") if start_date else None
+        end = end_date.strftime("%d/%m/%Y") if end_date else None
         data = {
-            '_' + REQ_PART + '_dateDebut': start_date,
-            '_' + REQ_PART + '_dateFin': end_date
+            '_' + REQ_PART + '_dateDebut': start,
+            '_' + REQ_PART + '_dateFin': end,
         }
 
         params = {
@@ -95,22 +104,34 @@ class LinkyClient(object):
         except (OSError, json.decoder.JSONDecodeError):
             raise PyLinkyError("Could not get data")
 
-        if  json_output.get('etat').get('valeur') == 'erreur':
+        if json_output.get('etat').get('valeur') == 'erreur':
             raise PyLinkyError("Could not get data")
 
         return json_output.get('graphe')
 
     def get_data_per_hour(self, start_date, end_date):
         """Retreives hourly energy consumption data."""
-        return self._format_data(self._get_data('urlCdcHeure', start_date, end_date), 'hours', "%H:%M")
+        return self._format_data(
+            self._get_data('urlCdcHeure', start_date, end_date),
+            'hours',
+            "%H:%M"
+        )
 
     def get_data_per_day(self, start_date, end_date):
         """Retreives daily energy consumption data."""
-        return self._format_data(self._get_data('urlCdcJour', start_date, end_date), 'days', "%d %b")
+        return self._format_data(
+            self._get_data('urlCdcJour', start_date, end_date),
+            'days',
+            "%d %b"
+        )
 
     def get_data_per_month(self, start_date, end_date):
         """Retreives monthly energy consumption data."""
-        return self._format_data(self._get_data('urlCdcMois', start_date, end_date), 'months', "%b")
+        return self._format_data(
+            self._get_data('urlCdcMois', start_date, end_date),
+            'months',
+            "%b"
+        )
 
     def get_data_per_year(self):
         """Retreives yearly energy consumption data."""
@@ -124,7 +145,10 @@ class LinkyClient(object):
             return []
 
         # Extract start date and parse it
-        start_date = datetime.datetime.strptime(data.get("periode").get("dateDebut"), "%d/%m/%Y").date()
+        start_date = datetime.datetime.strptime(
+            data.get("periode").get("dateDebut"),
+            "%d/%m/%Y"
+        ).date()
 
         # Calculate final start date using the "offset" attribute returned by the API
         inc = 1
@@ -137,8 +161,10 @@ class LinkyClient(object):
         # Generate data
         for ordre, value in enumerate(data.get('data')):
             kwargs = {format_data: ordre * inc}
-            result.append({"time": ((start_date + relativedelta(**kwargs)).strftime(time_format)),
-                           "conso": (value.get('valeur') if value.get('valeur') > 0 else 0)})
+            result.append({
+                "time": ((start_date + relativedelta(**kwargs)).strftime(time_format)),
+                "conso": (value.get('valeur') if value.get('valeur') > 0 else 0)
+            })
 
         return result
 
@@ -148,17 +174,21 @@ class LinkyClient(object):
         self.open_session()
 
         today = datetime.date.today()
+        yesterday = today - relativedelta(days=1)
         # last 2 days
-        self._data["hourly"] = self.get_data_per_hour((today - relativedelta(days=1)).strftime("%d/%m/%Y"),
-                                                     today.strftime("%d/%m/%Y"))
+        self._data["hourly"] = self.get_data_per_hour(yesterday, today)
 
         # last 30 days
-        self._data["daily"] = self.get_data_per_day((today - relativedelta(days=30)).strftime("%d/%m/%Y"),
-                                                       (today - relativedelta(days=1)).strftime("%d/%m/%Y"))
+        self._data["daily"] = self.get_data_per_day(
+            today - relativedelta(days=30),
+            yesterday
+        )
 
         # 12 last month
-        self._data["monthly"] = self.get_data_per_month((today - relativedelta(months=12)).strftime("%d/%m/%Y"),
-                                                         (today - relativedelta(days=1)).strftime("%d/%m/%Y"))
+        self._data["monthly"] = self.get_data_per_month(
+            today - relativedelta(months=12),
+            yesterday
+        )
 
         # 12 last month
         self._data["yearly"] = self.get_data_per_year()

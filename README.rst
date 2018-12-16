@@ -15,7 +15,7 @@ pyLinky
     :target: https://requires.io/github/Pirionfr/pyLinky/requirements/?branch=master
     :alt: Requirements Status
 
-Get your consumption data from your Enedis account (www.enedis.fr) 
+Get your consumption data from your Enedis account (www.enedis.fr)
 
 This library This is based on jeedom_linky, created by Outadoc (https://github.com/Asdepique777/jeedom_linky)
 
@@ -42,5 +42,5 @@ Dev env
 create virtual env and install requirements
 
     virtualenv -p /usr/bin/python3.5 env
-    pip install -r requirements.txt
+    pip install -r requirements-dev.txt
 

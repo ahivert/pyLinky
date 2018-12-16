@@ -4,6 +4,7 @@ import json
 
 from pylinky import LinkyClient
 
+
 def main():
     """Main function"""
     parser = argparse.ArgumentParser()
@@ -14,7 +15,6 @@ def main():
     args = parser.parse_args()
 
     client = LinkyClient(args.username, args.password)
-
 
     try:
         client.fetch_data()
@@ -28,4 +28,3 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
-
