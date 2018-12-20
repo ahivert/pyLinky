@@ -30,9 +30,11 @@ setup(
           ]
       },
       license='Apache 2.0',
-      install_requires=['python-dateutil','requests'],
+      install_requires=['python-dateutil==2.7.5', 'requests==2.21.0'],
       classifiers=[
+          'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
       ]
 )

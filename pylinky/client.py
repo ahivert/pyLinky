@@ -151,9 +151,7 @@ class LinkyClient(object):
         ).date()
 
         # Calculate final start date using the "offset" attribute returned by the API
-        inc = 1
-        if format_data == 'hours':
-            inc = 0.5
+        inc = 0.5 if format_data == 'hours' else 1
 
         kwargs = {format_data: data.get('decalage') * inc}
         start_date = start_date - relativedelta(**kwargs)
@@ -184,13 +182,13 @@ class LinkyClient(object):
             yesterday
         )
 
-        # 12 last month
+        # 12 last months
         self._data["monthly"] = self.get_data_per_month(
             today - relativedelta(months=12),
             yesterday
         )
 
-        # 12 last month
+        # 4 last years
         self._data["yearly"] = self.get_data_per_year()
 
     def get_data(self):

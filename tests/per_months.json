@@ -1,0 +1,20 @@
+{
+  "periode": { "dateDebut": "20/12/2017", "dateFin": "20/12/2018" },
+  "puissanceSouscrite": 0,
+  "decalage": 0,
+  "data": [
+    { "ordre": 0, "valeur": -2 },
+    { "ordre": 1, "valeur": 9.641 },
+    { "ordre": 2, "valeur": 647.597 },
+    { "ordre": 3, "valeur": 555.195 },
+    { "ordre": 4, "valeur": 389.073 },
+    { "ordre": 5, "valeur": 291.68 },
+    { "ordre": 6, "valeur": 223.03 },
+    { "ordre": 7, "valeur": 213.153 },
+    { "ordre": 8, "valeur": 187.025 },
+    { "ordre": 9, "valeur": 148.535 },
+    { "ordre": 10, "valeur": 319.42 },
+    { "ordre": 11, "valeur": 421.534 },
+    { "ordre": 12, "valeur": 272.246 }
+  ]
+}

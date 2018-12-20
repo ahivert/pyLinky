@@ -1,0 +1,11 @@
+{
+  "periode": { "dateDebut": "20/12/2015", "dateFin": "19/12/2018" },
+  "puissanceSouscrite": 0,
+  "decalage": 0,
+  "data": [
+    { "ordre": 0, "valeur": -2 },
+    { "ordre": 1, "valeur": -2 },
+    { "ordre": 2, "valeur": -2 },
+    { "ordre": 3, "valeur": 3678.129 }
+  ]
+}
